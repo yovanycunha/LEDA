@@ -40,8 +40,14 @@ public class RepositorioProdutoArrayList {
 	 * @return
 	 */
 	private int procurarIndice(int codigo) {
-		// TODO Implement your code here
-		throw new UnsupportedOperationException("Not implemented yet!");
+		for (int i = 0; i < produtos.size(); i++) {
+			Produto prod = (Produto)produtos.get(i);
+			if (codigo == prod.getCodigo()) {
+				return i;
+			}
+		}
+		return -1;
+		//throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
 	/**
