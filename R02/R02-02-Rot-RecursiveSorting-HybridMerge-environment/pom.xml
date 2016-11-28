@@ -108,13 +108,13 @@
 						<configuration>
 							<!-- MODIFIQUE O ATRIBUTO ABAIXO PARA false CASO VOCE NAO QUEIRA GERAR 
 								O GRAFICO DOS ALGORITMOS -->
-							<generateGraph>false</generateGraph>
+							<generateGraph>true</generateGraph>
 							<!-- INSIRA OS NOMES COMPLETOS DAS CLASSES A SEREM TESTADAS AQUI (Full 
 								qualified name = nome com o pacote) -->
 							<qualifiedNames>
-								<!-- name>sorting.simpleSorting.BubbleSort</name -->
-								<!-- name>sorting.simpleSorting.SelectionSort</name -->
-								<!-- name>sorting.simpleSorting.InsertionSort</name -->
+								<name>sorting.divideAndConquer.MergeSort</name>
+								<name>sorting.divideAndConquer.QuickSort</name>
+								<name>sorting.divideAndConquer.hybridMergesort.HybridMergeSort</name>
 							</qualifiedNames>
 						</configuration>
 					</execution>

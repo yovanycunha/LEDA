@@ -1,7 +1,5 @@
 package sorting.divideAndConquer;
 
-import java.util.Arrays;
-
 import sorting.AbstractSorting;
 
 /**
@@ -12,57 +10,59 @@ import sorting.AbstractSorting;
  */
 public class MergeSort<T extends Comparable<T>> extends AbstractSorting<T> {
 
-	@Override
-	public void sort(T[] array, int leftIndex, int rightIndex) {
+   @Override
+   public void sort(T[] array, int leftIndex, int rightIndex) {
 
-		if (array != null && leftIndex < rightIndex) {
-			int med = (rightIndex + leftIndex) / 2;
+      if (array != null && leftIndex < rightIndex) {
+         int med = (rightIndex + leftIndex) / 2;
 
-			sort(array, leftIndex, med);
-			sort(array, med + 1, rightIndex);
+         sort(array, leftIndex, med);
+         sort(array, med + 1, rightIndex);
 
-			merge(array, leftIndex, med, rightIndex);
+         merge(array, leftIndex, med, rightIndex);
 
-		}
+      }
 
-	}
+   }
 
-	public void merge(T[] array, int leftIndex, int med, int rightIndex) {
+   public void merge(T[] array, int leftIndex, int med, int rightIndex) {
 
-		T[] helper = (T[]) new Comparable[rightIndex - leftIndex];
+      T[] helper = (T[]) new Comparable[array.length];
 
-		helper = Arrays.copyOf(array, array.length);
+      for (int i = leftIndex; i <= rightIndex; i++) {
+         helper[i] = array[i];
+      }
 
-		int i = leftIndex;
-		int j = med + 1;
-		int k = leftIndex;
+      int i = leftIndex;
+      int j = med + 1;
+      int k = leftIndex;
 
-		while (i <= med && j <= rightIndex) {
+      while (i <= med && j <= rightIndex) {
 
-			if (helper[i].compareTo(helper[j]) < 0) {
-				array[k] = helper[i];
-				i++;
+         if (helper[i].compareTo(helper[j]) < 0) {
+            array[k] = helper[i];
+            i++;
 
-			} else {
-				array[k] = helper[j];
-				j++;
-			}
-			
-			k++;
-			
-		}
-		
-		while(i <= med){
-			array[k] = helper[i];
-			i++;
-			k++;
-		}
-		
-		while(j <= rightIndex){
-			array[k] = helper[j];
-			j++;
-			k++;
-		}
+         } else {
+            array[k] = helper[j];
+            j++;
+         }
 
-	}
+         k++;
+
+      }
+
+      while (i <= med) {
+         array[k] = helper[i];
+         i++;
+         k++;
+      }
+
+      while (j <= rightIndex) {
+         array[k] = helper[j];
+         j++;
+         k++;
+      }
+
+   }
 }
