@@ -50,7 +50,7 @@ public class StudentQueueTest {
 
 	@Test
 	public void testIsFull() {
-		assertFalse(queue1.isFull());
+		assertFalse(queue2.isFull());
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class StudentQueueTest {
 
 	@Test(expected = QueueOverflowException.class)
 	public void testEnqueueComErro() throws QueueOverflowException {
-		queue2.enqueue(new Integer(5)); // vai depender do tamanho que a fila
+		queue1.enqueue(new Integer(5)); // vai depender do tamanho que a fila
 										// foi iniciada!!!
 	}
 

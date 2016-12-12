@@ -49,7 +49,7 @@ public class StudentStackTest {
 
 	@Test
 	public void testIsFull() {
-		assertFalse(stack1.isFull()); // vai depender do tamanho que a pilha foi
+		assertFalse(stack2.isFull()); // vai depender do tamanho que a pilha foi
 										// iniciada!!!!
 	}
 
@@ -64,7 +64,7 @@ public class StudentStackTest {
 
 	@Test(expected = StackOverflowException.class)
 	public void testPushComErro() throws StackOverflowException {
-		stack2.push(new Integer(5)); // levanta excecao apenas se o tamanhonao
+		stack1.push(new Integer(5)); // levanta excecao apenas se o tamanhonao
 										// permitir outra insercao
 	}
 
@@ -80,6 +80,6 @@ public class StudentStackTest {
 	@Test(expected = StackUnderflowException.class)
 	public void testPopComErro() throws StackUnderflowException {
 		assertEquals(new Integer(3), stack3.pop()); // levanta excecao apenas se
-													// stack1 for vazia
+													// stack3 for vazia
 	}
 }
