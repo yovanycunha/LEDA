@@ -31,10 +31,9 @@ public class StudentStackTest {
 	}
 
 	private void getImplementations() {
-		// TODO O aluno deve ajustar aqui para instanciar sua implementação
-		stack1 = null;
-		stack2 = null;
-		stack3 = null;
+		stack1 =  new StackImpl<>(6);
+		stack2 = new StackImpl<>(2);
+		stack3 = new StackImpl<>(3);
 	}
 
 	// MÉTODOS DE TESTE
@@ -58,15 +57,14 @@ public class StudentStackTest {
 	public void testPush() {
 		try {
 			stack1.push(new Integer(5));
-		} catch (StackOverflowException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (StackOverflowException soe) {
+			soe.getMessage();
 		}
 	}
 
 	@Test(expected = StackOverflowException.class)
 	public void testPushComErro() throws StackOverflowException {
-		stack1.push(new Integer(5)); // levanta excecao apenas se o tamanhonao
+		stack2.push(new Integer(5)); // levanta excecao apenas se o tamanhonao
 										// permitir outra insercao
 	}
 
@@ -74,15 +72,14 @@ public class StudentStackTest {
 	public void testPop() {
 		try {
 			assertEquals(new Integer(3), stack1.pop());
-		} catch (StackUnderflowException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (StackUnderflowException sue) {
+			sue.getMessage();
 		}
 	}
 
 	@Test(expected = StackUnderflowException.class)
 	public void testPopComErro() throws StackUnderflowException {
-		assertEquals(new Integer(3), stack1.pop()); // levanta excecao apenas se
+		assertEquals(new Integer(3), stack3.pop()); // levanta excecao apenas se
 													// stack1 for vazia
 	}
 }

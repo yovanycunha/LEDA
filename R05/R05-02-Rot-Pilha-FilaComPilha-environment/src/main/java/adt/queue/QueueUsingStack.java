@@ -2,45 +2,90 @@ package adt.queue;
 
 import adt.stack.Stack;
 import adt.stack.StackImpl;
+import adt.stack.StackOverflowException;
+import adt.stack.StackUnderflowException;
 
 public class QueueUsingStack<T> implements Queue<T> {
 
-	private Stack<T> stack1;
-	private Stack<T> stack2;
+	private static int CAPACITY;
+	private Stack<T> stackMajor;
+	private Stack<T> stackHelper;
 
 	public QueueUsingStack(int size) {
-		stack1 = new StackImpl<T>(size);
-		stack2 = new StackImpl<T>(size);
+		stackMajor = new StackImpl<T>(size);
+		stackHelper = new StackImpl<T>(size);
+		this.CAPACITY = size;
 	}
 
 	@Override
 	public void enqueue(T element) throws QueueOverflowException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (this.isFull()) {
+			throw new QueueOverflowException();
+		}
+		if (element == null) {
+			return;
+		}
+		try {
+			this.stackMajor.push(element);
+		} catch (StackOverflowException e) {
+			// is this real life ? 
+		}
 	}
 
 	@Override
 	public T dequeue() throws QueueUnderflowException {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (isEmpty()) {
+			throw new QueueUnderflowException();
+		}
+		try {
+			this.elemetsTransfer(stackMajor, stackHelper);
+			T element = this.stackHelper.pop();
+			this.elemetsTransfer(stackHelper, stackMajor);
+			return element;
+		} catch (StackOverflowException e) {
+			throw new RuntimeException();
+		} catch (StackUnderflowException e) {
+			throw new RuntimeException();
+		}
 	}
 
 	@Override
 	public T head() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (this.isEmpty()) {
+			return null;
+		}
+		try {
+			this.elemetsTransfer(stackMajor, stackHelper);
+			T element = stackHelper.top();
+			this.elemetsTransfer(stackHelper, stackMajor);
+			return element;
+		} catch (StackOverflowException | StackUnderflowException e) {
+			throw new RuntimeException(); // "isso pode, Arnaldo?" - Galvão sobre essa seboseira
+		}
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (this.stackMajor.isEmpty() && this.stackHelper.isEmpty()) ? true:false;
 	}
 
 	@Override
 	public boolean isFull() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (this.stackMajor.isFull() || this.stackHelper.isFull()) ? true:false;
+	}
+	
+	/**
+	 * Transfers elemets from the first stack (stack1) to second stack (stack2) using L.I.F.O.
+	 * 
+	 * @param stack1
+	 * @param stack2
+	 * @throws StackUnderflowException 
+	 * @throws StackOverflowException 
+	 */
+	public void elemetsTransfer(Stack stack1, Stack stack2) throws StackOverflowException, StackUnderflowException{
+		while (!stack1.isEmpty()) {
+			stack2.push(stack1.pop());
+		}
 	}
 
 }
