@@ -2,6 +2,7 @@ package adt.bst;
 
 public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
+	private static  final int ZERO = 0;
 	protected BSTNode<T> root;
 
 	public BSTImpl() {
@@ -67,21 +68,80 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public T[] preOrder() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return buildWalk("pre");		
 	}
-
+	
 	@Override
 	public T[] order() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return buildWalk("order");
 	}
-
+	
 	@Override
 	public T[] postOrder() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return buildWalk("pos");
 	}
+
+	private T[] buildWalk(String order) {
+		
+		int sizeOfArray = size();
+		T[] array = (T[]) new Comparable[sizeOfArray];
+		
+		if (!isEmpty()) {
+			
+			switch (order) {
+			case "pre":
+				buildPre(array, ZERO, this.getRoot());
+				break;
+
+			case "pos":
+				buildPos(array, ZERO, this.getRoot());
+				break;
+			
+			case "order":
+				buildOrder(array, ZERO, this.getRoot());
+			default:
+				break;
+			}
+			
+		}
+		return array;
+	
+	}
+
+	private int buildOrder(T[] array, int index, BSTNode<T> node) {
+		
+		if (!node.isEmpty()) {
+			index = buildOrder(array, index, (BSTNode<T>) node.getLeft());
+			
+			array[index++] = node.getData();
+			
+			index = buildOrder(array, index, (BSTNode<T>) node.getRight());
+		}
+		return index;
+	}
+
+	private int buildPos(T[] array, int index, BSTNode<T> node) {
+
+		if(!node.isEmpty()) {
+			index = buildPos(array, index, (BSTNode<T>) node.getLeft());
+			index = buildPos(array, index, (BSTNode<T>) node.getRight());
+			
+			array[index++] = node.getData();
+		}
+		return index;
+	}
+
+	private int buildPre(T[] array, int index, BSTNode<T> node) {
+		if (!node.isEmpty()) {
+			array[index++] = node.getData();
+			
+			index = buildPre(array, index, (BSTNode<T>) node.getLeft());
+			index = buildPre(array, index, (BSTNode<T>) node.getRight());
+					
+		}
+		return index;
+	}
+
 
 	/**
 	 * This method is already implemented using recursion. You must understand
