@@ -1,5 +1,7 @@
 package adt.bst;
 
+import adt.bt.BTNode;
+
 public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	private static  final int ZERO = 0;
@@ -32,20 +34,54 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public void insert(T element) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		insertElem(element, this.getRoot());
+	}
+
+	private void insertElem(T element, BSTNode<T> node) {
+		if (element != null) {
+			if(node.isEmpty()) {
+				node.setData(element);
+				node.setLeft(new BTNode<>());
+				node.setRight(new BTNode<>());
+				node.setParent(node);
+			} else {
+				if (element.compareTo(node.getData()) > ZERO) {
+					insertElem(element, (BSTNode<T>) node.getRight());
+				} else if (element.compareTo(node.getData()) < ZERO) {
+					insertElem(element, (BSTNode<T>) node.getLeft());
+				}
+			}
+		}
 	}
 
 	@Override
 	public BSTNode<T> maximum() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return maxNode(this.getRoot());
+	}
+
+	private BSTNode<T> maxNode(BSTNode<T> node) {
+		if (node.isEmpty()) {
+			return null;
+		} else if (node.getRight().isEmpty()) {
+			return node;
+		} else {
+			return maxNode((BSTNode<T>) node.getRight());
+		}
 	}
 
 	@Override
 	public BSTNode<T> minimum() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return minNode(this.getRoot());
+	}
+
+	private BSTNode<T> minNode(BSTNode<T> node) {
+		if (node.isEmpty()) {
+			return null;
+		} else if (node.getLeft().isEmpty()) {
+			return node;
+		} else {
+			return minNode((BSTNode<T>) node.getLeft());
+		}
 	}
 
 	@Override
