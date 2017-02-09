@@ -4,6 +4,7 @@ import adt.bt.BTNode;
 
 public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
+	private static final int INVALID_NODE = -1;
 	private static final String POST = "post";
 	private static final String ORDER = "order";
 	private static final String PRE = "pre";
@@ -26,8 +27,15 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public int height() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return height(this.getRoot());
+	}
+
+	private int height(BSTNode<T> node) {
+		if (node.isEmpty()) {
+			return INVALID_NODE;
+		} else {
+			return 1 + Math.max(height((BSTNode<T>) node.getLeft()), height((BSTNode<T>) node.getRight()));
+		}
 	}
 
 	@Override
