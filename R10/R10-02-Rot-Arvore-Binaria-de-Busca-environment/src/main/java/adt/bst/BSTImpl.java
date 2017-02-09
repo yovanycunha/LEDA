@@ -4,7 +4,11 @@ import adt.bt.BTNode;
 
 public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
+	private static final String POST = "post";
+	private static final String ORDER = "order";
+	private static final String PRE = "pre";
 	private static  final int ZERO = 0;
+	
 	protected BSTNode<T> root;
 
 	public BSTImpl() {
@@ -28,8 +32,23 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public BSTNode<T> search(T element) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return searchElem(element, this.getRoot());
+	}
+
+
+
+	private BSTNode<T> searchElem(T element, BSTNode<T> node) {
+		if (element == null) {
+			return new BSTNode<T>();
+		} else {
+			if (node.isEmpty() || element.equals(node.getData())) return node;
+			
+			else if (element.compareTo(node.getData()) > ZERO) return searchElem(element, (BSTNode<T>) node.getRight());
+			
+			else return searchElem(element, (BSTNode<T>) node.getLeft());
+						
+		}
+	
 	}
 
 	@Override
@@ -86,14 +105,53 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public BSTNode<T> sucessor(T element) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		BSTNode<T> out = this.search(element);
+		
+		if (out.isEmpty()) {
+			return null;
+		}
+		return sucessorPrivate(out);
+	
+	}
+
+	private BSTNode<T> sucessorPrivate(BSTNode<T> out) {
+		BSTNode<T> node = this.minNode((BSTNode<T>) out.getRight());
+		
+		if (node != null) {
+			return node;
+		} else {
+			node = (BSTNode<T>) node.getParent();
+			while (node != null && node.getData().compareTo(out.getData()) < ZERO) {
+				node = (BSTNode<T>) node.getParent();
+			}
+			return node;
+		}
 	}
 
 	@Override
 	public BSTNode<T> predecessor(T element) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		BSTNode<T> out = this.search(element);
+		
+		if (out.isEmpty()) {
+			return null;
+		}
+		return predecessorPrivate(out);
+		
+	}
+
+	private BSTNode<T> predecessorPrivate(BSTNode<T> out) {
+		BSTNode<T> node = this.maxNode((BSTNode<T>) out.getLeft());
+		
+		if (node != null) {
+			return node;
+		} else {
+			node = (BSTNode<T>) node.getParent();
+			while (node != null && node.getData().compareTo(out.getData()) < ZERO) {
+				node = (BSTNode<T>) node.getParent();
+			}
+			return node;
+		}
+	
 	}
 
 	@Override
@@ -104,17 +162,17 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 
 	@Override
 	public T[] preOrder() {
-		return buildWalk("pre");		
+		return buildWalk(PRE);		
 	}
 	
 	@Override
 	public T[] order() {
-		return buildWalk("order");
+		return buildWalk(ORDER);
 	}
 	
 	@Override
 	public T[] postOrder() {
-		return buildWalk("pos");
+		return buildWalk(POST);
 	}
 
 	private T[] buildWalk(String order) {
@@ -125,15 +183,15 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 		if (!isEmpty()) {
 			
 			switch (order) {
-			case "pre":
+			case PRE:
 				buildPre(array, ZERO, this.getRoot());
 				break;
 
-			case "pos":
+			case POST:
 				buildPos(array, ZERO, this.getRoot());
 				break;
 			
-			case "order":
+			case ORDER:
 				buildOrder(array, ZERO, this.getRoot());
 			default:
 				break;
