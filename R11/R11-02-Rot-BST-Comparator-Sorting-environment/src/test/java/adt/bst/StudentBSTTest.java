@@ -2,15 +2,18 @@ package adt.bst;
 
 import static org.junit.Assert.*;
 
+import java.util.Comparator;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import adt.bst.BSTImpl;
+import adt.bst.extended.SortComparatorBSTImpl;
 import adt.bt.BTNode;
 
 public class StudentBSTTest {
 
-	private BSTImpl<Integer> tree;
+	private BST<Integer> tree;
 	private BTNode<Integer> NIL = new BTNode<Integer>();
 
 	private void fillTree() {
@@ -22,7 +25,14 @@ public class StudentBSTTest {
 
 	@Before
 	public void setUp() {
-		tree = new BSTImpl<>();
+		Comparator<Integer> comparator = new Comparator<Integer>() {
+
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				return o1 - o2;
+			}
+		};
+		tree = new SortComparatorBSTImpl<Integer>(comparator);
 	}
 
 	@Test
