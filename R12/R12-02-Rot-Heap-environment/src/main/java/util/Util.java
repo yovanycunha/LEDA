@@ -35,7 +35,7 @@ public class Util {
 	 */
 	public static <T> T[] makeArray(int size) {
 		@SuppressWarnings("unchecked")
-		T[] array = (T[]) new Object[size];
+		T[] array = (T[]) new Comparable[size];
 		return array;
 	}
 
