@@ -11,26 +11,29 @@ public class Util {
 	 * @return
 	 */
 	public static <T extends Comparable<T>> BSTNode<T> leftRotation(BSTNode<T> node) {
-		
-		if (node == null) {
-			return null;
-		} else if (node.isEmpty()) {
-			return null;
-		}
-		
+			
 		BSTNode<T> aux = (BSTNode<T>) node.getRight();
+		
 		node.setRight(aux.getLeft());
-		node.getRight().setParent(node);
-		aux.setParent(node.getParent());
-		if (node.getParent().getLeft() == node) {
-			node.getParent().setLeft(aux);
-		} else {
-			node.getParent().setRight(aux);
+		aux.setLeft(node);
+		if (node.getParent() != null) {	
+			if (leftChildrem(node)) {
+				node.getParent().setLeft(aux);
+			} else {
+				node.getParent().setRight(aux);
+			}
 		}
 		
-		aux.setLeft(node);
+		aux.setParent(node.getParent());
 		node.setParent(aux);
 		return aux;
+	}
+
+	private static <T extends Comparable<T>> boolean leftChildrem(BSTNode<T> node) {
+		return (node.getParent() != null &&
+				!node.getParent().isEmpty() &&
+				!node.getParent().getLeft().isEmpty() &&
+				node.getParent().getLeft().getData().equals(node.getData()));
 	}
 
 	/**
@@ -41,19 +44,21 @@ public class Util {
 	 */
 	public static <T extends Comparable<T>> BSTNode<T> rightRotation(BSTNode<T> node) {
 
-		if (node == null || node.isEmpty()) {
-			return null;
-		}
 
 		BSTNode<T> aux = (BSTNode<T>) node.getLeft();
+		
 		node.setLeft(aux.getRight());
-		node.getLeft().setParent(node);
-		aux.setParent(node.getParent());
-		if (node.getParent().getLeft() == node) {
-			node.getParent().setLeft(aux);
-		} else {
-			node.getParent().setRight(aux);
+		aux.setRight(node);
+		if (node.getParent() != null) {
+			if (leftChildrem(node)) {
+				node.getParent().setLeft(aux);
+			} else {
+				node.getParent().setRight(aux);
+			}
 		}
+		aux.setParent(node.getParent());
+		node.setParent(aux);
+		
 		return aux;
 	}
 
