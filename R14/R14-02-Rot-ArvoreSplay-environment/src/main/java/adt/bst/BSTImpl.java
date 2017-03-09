@@ -233,8 +233,8 @@ public class BSTImpl<T extends Comparable<T>> implements BST<T> {
 				node.getParent().setRight(aux);
 			}
 			aux.setParent(node.getParent());
-		
 		}
+		
 		return aux;
 	}
 	

@@ -6,6 +6,9 @@ import adt.bt.Util;
 
 public class SplayTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements SplayTree<T> {
 
+	private static final int ONE = 1;
+	private static final int ZERO = 0;
+
 	@Override
 	public void insert(T element) {
 		BSTNode<T> node = super.insertElem(element, this.root, null);
@@ -22,16 +25,35 @@ public class SplayTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implement
 
 	@Override
 	public BSTNode<T> search(T element) {
-		BSTNode<T> node = super.search(element);
-
-		if (node.isEmpty()) {
-			this.splay((BSTNode<T>) node.getParent());
-		} else {
-			this.splay(node);
-		}
-
+		BSTNode<T> node = search(this.root, element);
+		this.splay(node);
 		return node;
 	}
+
+	private BSTNode<T> search(BSTNode<T> node, T element) {
+		if (node.isEmpty()) {
+			return new BSTNode<T>();
+		} else {
+			
+			if (element.compareTo(node.getData()) == ZERO) {
+				return node;
+			} else if (element.compareTo(node.getData()) == ONE) {
+				if (node.getRight().isEmpty()) {
+					return node;
+				} else {
+					return search((BSTNode<T>) node.getRight(), element);
+				}
+			} else {
+				if (node.getLeft().isEmpty()) {
+					return node;
+				} else {
+					return search((BSTNode<T>) node.getLeft(), element);
+				}
+			}
+		}
+	
+	}
+
 
 	private void splay(BSTNode<T> node) {
 		if (node != null && node.getParent() != null) {
