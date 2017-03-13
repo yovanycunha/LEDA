@@ -2,6 +2,9 @@ package adt.skipList;
 
 public class SkipListImpl<T> implements SkipList<T> {
 
+	private static final int TWO = 2;
+	private static final int ONE = 1;
+	private static final int ZERO = 0;
 	protected SkipListNode<T> root;
 	protected SkipListNode<T> NIL;
 
@@ -23,46 +26,142 @@ public class SkipListImpl<T> implements SkipList<T> {
 	 * metodo deve conectar apenas o forward[0].
 	 */
 	private void connectRootToNil() {
-		for (int i = 0; i < maxHeight; i++) {
+		for (int i = ZERO; i < maxHeight; i++) {
 			root.forward[i] = NIL;
 		}
 	}
 
-	
 	@Override
 	public void insert(int key, T newValue, int height) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		
+		if (newValue == null || height > maxHeight || height < ZERO) {
+			return;
+		}
+		
+		SkipListNode<T>[] update =  new SkipListNode[this.maxHeight];
+		SkipListNode<T> helper = this.root;
+		
+		for (int i = this.maxHeight - ONE; i >= ZERO; i--) {
+			
+			while (helper != null && helper.getForward(i) != null &&
+					(!helper.equals(NIL)) && helper.getForward(i).getKey() < key) {
+				helper = helper.getForward(i);
+			}
+			update[i] = helper;
+		}
+		
+		if (helper.getForward(ZERO) != null) {
+			helper = helper.getForward(ZERO);
+		}
+		
+		if (helper.getKey() == key) {
+			helper.setValue(newValue);
+		} else {
+			
+			SkipListNode<T> newNode = new SkipListNode<>(key, height, newValue);
+			for (int i = ZERO; i < height; i++) {
+				newNode.forward[i] = update[i].forward[i];
+				update[i].forward[i] = newNode;
+			}			
+		}
 	}
 
 	@Override
 	public void remove(int key) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+
+		SkipListNode<T>[] update = new SkipListNode[this.maxHeight];
+		SkipListNode<T> helper = this.root;
+		int height = this.maxHeight;
+		
+		for (int i = height - ONE; i >= ZERO; i--) {
+			
+			while (helper.getForward(i).getKey() < key) {
+				helper = helper.getForward(i);
+			}
+			
+			update[i] = helper;
+		}
+		
+		if (helper.getForward(ZERO) != null) {
+			helper = helper.getForward(ZERO);
+		}
+		
+		if (helper.getKey() == key) {
+			
+			for (int i = ZERO; i < this.height(); i++) {
+				
+				if (!update[i].getForward(i).equals(helper)) {
+					break;
+				}
+				
+				update[i].getForward()[i] = helper.getForward(i);
+				
+			}			
+		}		
 	}
 
 	@Override
 	public int height() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+
+		int height = ZERO;
+		SkipListNode<T> forward = this.root.getForward(ZERO);
+
+		while (!forward.equals(NIL)) {
+			if (forward.height() > height) {
+				height = forward.height();
+			}
+			forward = forward.getForward(ZERO);
+		}
+		return height;
 	}
 
 	@Override
 	public SkipListNode<T> search(int key) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		SkipListNode<T> helper = this.root;
+
+		for (int i = this.maxHeight - 1; i >= ZERO; i--) {
+			while (helper.forward[i] != null && (!helper.equals(NIL)) && helper.forward[i].key < key) {
+				helper = helper.forward[i];
+			}
+		}
+
+		if (helper.forward != null) {
+			helper = helper.getForward(ZERO);
+		}
+
+		if (helper.key == key) {
+			return helper;
+		} else {
+			return null;
+		}
 	}
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		int size = ZERO;
+		SkipListNode<T> helper = this.root.getForward(ZERO);
+
+		while (helper.getForward(ZERO) != null) {
+			size++;
+			helper = helper.getForward(ZERO);
+		}
+
+		return size;
 	}
 
 	@Override
 	public SkipListNode<T>[] toArray() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+
+		SkipListNode<T>[] array = new SkipListNode[size() + TWO];
+		SkipListNode<T> helper = this.root;
+		int index = ZERO;
+
+		while (helper != null) {
+			array[index++] = helper;
+			helper = helper.getForward(ZERO);
+		}
+
+		return array;
 	}
 
 }
