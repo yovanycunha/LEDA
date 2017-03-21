@@ -112,31 +112,23 @@ public class RBTreeImpl<T extends Comparable<T>> extends BSTImpl<T> implements R
     * returns an exception if the black heights are different.
     */
    private boolean verifyBlackHeight() {
-      int leftHeight = verifyBlackHeightRecursive((RBNode<T>) this.getRoot().getLeft(), ZERO);
-      int rightHeight = verifyBlackHeightRecursive((RBNode<T>) this.getRoot().getRight(), ZERO);
-
-      if (leftHeight == rightHeight) {
-         return true;
-      }
-
-      return false;
+      return verifyBlackHeightRecursive((RBNode<T>) this.root);
    }
 
-   private int verifyBlackHeightRecursive(RBNode<T> node, int height) {
-
-      if (node != null && !node.isEmpty()) {
-
-         if (isBlackNode(node)) {
-            height++;
-         }
-
-         return Math.max(verifyBlackHeightRecursive((RBNode<T>) node.getLeft(), height),
-               verifyBlackHeightRecursive((RBNode<T>) node.getRight(), height));
-
-      }
-
-      height++;
-      return height;
+   private boolean verifyBlackHeightRecursive(RBNode<T> node) {
+	   
+	   if (node.isEmpty()) {
+		return true;
+	
+	   
+	   } else if (blackHeightRecursive((RBNode<T>)node.getRight()) == blackHeightRecursive((RBNode<T>)node.getLeft())) {
+		   return verifyBlackHeightRecursive((RBNode<T>)node.getRight()) &&
+				   verifyBlackHeightRecursive((RBNode<T>)node.getLeft());
+		   
+	   } else {
+		   throw new RuntimeException("The black-heights are not equals");
+		   
+	   }
    }
 
    @Override
